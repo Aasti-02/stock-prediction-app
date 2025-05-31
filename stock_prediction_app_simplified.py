@@ -5,76 +5,74 @@ from sklearn.ensemble import RandomForestRegressor
 import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter, YearLocator, MonthLocator
 
-# Set page configuration for a wide, modern layout
-st.set_page_config(page_title="Stock Price Predictor", layout="wide")
+# Set page configuration for a wide, professional layout
+st.set_page_config(page_title="Stock Price Predictor 📈", layout="wide")
 
-# Custom CSS for a pastel color theme and hamburger menu
+# Custom CSS for a pastel green and white theme
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto:wght@300;400;700&display=swap');
     
     .main {
-        background: linear-gradient(135deg, #f0e6ef 0%, #b8d8d8 100%);
+        background: linear-gradient(135deg, #ABFAA9 0%, #ffffff 100%);
         padding: 30px;
         border-radius: 15px;
-        box-shadow: 0 0 15px rgba(135, 182, 194, 0.3);
+        box-shadow: 0 0 10px rgba(171, 250, 169, 0.3);
     }
     h1 {
         font-family: 'Poppins', sans-serif;
-        color: #7a9eb1;
-        text-shadow: 0 0 8px rgba(135, 182, 194, 0.5);
+        color: #2e7d32;
         font-size: 2.5em;
         text-align: center;
     }
     h2 {
         font-family: 'Poppins', sans-serif;
-        color: #ef959d;
-        text-shadow: 0 0 6px rgba(239, 149, 157, 0.5);
+        color: #388e3c;
         font-size: 1.7em;
     }
     .stSelectbox, .stNumberInput > div > div > input {
         background-color: #ffffff;
-        border: 2px solid #b8d8d8;
+        border: 2px solid #ABFAA9;
         border-radius: 10px;
-        color: #4a4a4a;
+        color: #2e2e2e;
         font-family: 'Roboto', sans-serif;
         padding: 8px;
         transition: border-color 0.3s;
     }
     .stSelectbox:hover, .stNumberInput > div > div > input:hover {
-        border-color: #ef959d;
+        border-color: #388e3c;
     }
     .stButton > button {
-        background: linear-gradient(45deg, #ef959d, #b8d8d8);
-        color: #ffffff;
+        background: linear-gradient(45deg, #ABFAA9, #ffffff);
+        color: #2e7d32;
         border: none;
         border-radius: 10px;
         font-family: 'Poppins', sans-serif;
         font-weight: 600;
         padding: 10px 25px;
         transition: transform 0.3s, box-shadow 0.3s;
-        box-shadow: 0 0 10px rgba(135, 182, 194, 0.4);
+        box-shadow: 0 0 10px rgba(171, 250, 169, 0.4);
     }
     .stButton > button:hover {
         transform: scale(1.05);
-        box-shadow: 0 0 20px rgba(239, 149, 157, 0.6);
+        box-shadow: 0 0 15px rgba(56, 142, 60, 0.6);
     }
     .stSuccess {
-        background: linear-gradient(45deg, #a8e6cf, #dcedc1);
+        background: linear-gradient(45deg, #81c784, #c8e6c9);
         border-radius: 10px;
         padding: 12px;
-        color: #4a4a4a;
+        color: #2e2e2e;
         font-family: 'Roboto', sans-serif;
-        box-shadow: 0 0 10px rgba(168, 230, 207, 0.4);
+        box-shadow: 0 0 10px rgba(129, 199, 132, 0.4);
         text-align: center;
     }
     .stMarkdown p, .stMarkdown li {
         font-family: 'Roboto', sans-serif;
-        color: #4a4a4a;
+        color: #ffffff;
         font-size: 0.9em;
     }
     .stMarkdown strong {
-        color: #7a9eb1;
+        color: #ffffff;
         font-weight: 700;
     }
     /* Hamburger menu styling */
@@ -92,20 +90,20 @@ st.markdown("""
     .hamburger span {
         width: 100%;
         height: 3px;
-        background: #ef959d;
+        background: #388e3c;
         border-radius: 2px;
         transition: all 0.3s ease;
-        box-shadow: 0 0 5px rgba(239, 149, 157, 0.5);
+        box-shadow: 0 0 5px rgba(56, 142, 60, 0.5);
     }
     .hamburger:hover span {
-        background: #b8d8d8;
-        box-shadow: 0 0 8px rgba(184, 216, 216, 0.7);
+        background: #ABFAA9;
+        box-shadow: 0 0 8px rgba(171, 250, 169, 0.7);
     }
     .sidebar-content {
         background: #ffffff;
         border-radius: 10px;
         padding: 15px;
-        box-shadow: 0 0 10px rgba(135, 182, 194, 0.3);
+        box-shadow: 0 0 10px rgba(171, 250, 169, 0.3);
         margin-top: 10px;
     }
     </style>
@@ -117,12 +115,12 @@ if 'show_stock_info' not in st.session_state:
 
 # Hamburger menu button in sidebar
 with st.sidebar:
-    if st.button("☰", key="hamburger"):
+    if st.button("☰ Stock Basics", key="hamburger"):
         st.session_state.show_stock_info = not st.session_state.show_stock_info
     
     if st.session_state.show_stock_info:
         st.markdown('<div class="sidebar-content">', unsafe_allow_html=True)
-        st.header("Stock Market Basics")
+        st.header("Stock Market Basics 📚")
         st.markdown("""
             - **What is a stock?**  
               A stock represents ownership in a company, giving you a share of its profits and growth.
@@ -131,9 +129,9 @@ with st.sidebar:
             - **What determines stock prices?**  
               Prices are driven by company performance, market demand, and economic factors.
             - **What is a bull market?**  
-              A period when stock prices rise, reflecting investor optimism.
+              A period when stock prices rise, reflecting investor optimism 🐂.
             - **What is a bear market?**  
-              A period when stock prices fall, indicating investor pessimism.
+              A period when stock prices fall, indicating investor pessimism 🐻.
             - **What are dividends?**  
               Payments from a company’s profits to shareholders, often quarterly.
             - **What is trading?**  
@@ -141,11 +139,11 @@ with st.sidebar:
             - **What are risk and return?**  
               Stocks offer high potential returns but carry risks; diversification helps manage risk.
             - **What are market indices?**  
-              Metrics like the S&P 500 or Dow Jones track a group of stocks to show market trends.
+              Metrics like the S&P 500 or Dow Jones track a group of stocks to show market trends 📊.
         """)
         st.markdown('</div>', unsafe_allow_html=True)
 
-st.title("Stock Price Predictor")
+st.title("Stock Price Predictor 📈")
 
 @st.cache_data
 def load_data():
@@ -178,30 +176,30 @@ for ticker in tickers:
     model.fit(X, y)
     models[ticker] = model
 
-# Plotting section with a pastel-styled graph
-st.header("Stock Price History")
+# Plotting section with a serious, standard graph
+st.header("Stock Price History 📅")
 ticker = st.selectbox("Choose a company to view historical prices:", tickers, key="plot_ticker")
 ticker_df = df[df['Ticker'] == ticker].copy()
 
-# Custom Matplotlib style for a pastel look
+# Standard Matplotlib style for a serious look
 plt.rcParams.update({
-    'axes.facecolor': '#f0e6ef',
+    'axes.facecolor': '#ffffff',
     'figure.facecolor': '#ffffff',
-    'axes.edgecolor': '#7a9eb1',
-    'axes.labelcolor': '#7a9eb1',
-    'xtick.color': '#7a9eb1',
-    'ytick.color': '#7a9eb1',
-    'text.color': '#7a9eb1',
-    'grid.color': '#b8d8d8',
-    'grid.linestyle': ':',
-    'grid.linewidth': 0.7,
+    'axes.edgecolor': '#000000',
+    'axes.labelcolor': '#000000',
+    'xtick.color': '#000000',
+    'ytick.color': '#000000',
+    'text.color': '#000000',
+    'grid.color': '#b0bec5',
+    'grid.linestyle': '--',
+    'grid.linewidth': 0.5,
     'font.family': 'sans-serif',
     'font.sans-serif': ['Roboto', 'Arial', 'sans-serif']
 })
 
 fig, ax = plt.subplots(figsize=(14, 7))
 ax.plot(ticker_df['Date'], ticker_df['Close'], label=f'{ticker} Closing Price', 
-        color='#ef959d', linewidth=3.5)
+        color='#1565c0', linewidth=2.5)
 ax.set_title(f'{ticker} Stock Price Over Time', fontsize=16, fontweight='bold', fontfamily='Poppins')
 ax.set_xlabel('Date', fontsize=12)
 ax.set_ylabel('Closing Price ($)', fontsize=12)
@@ -224,22 +222,22 @@ else:
 ax.tick_params(axis='x', labelsize=10, rotation=45)
 ax.tick_params(axis='y', labelsize=10)
 ax.grid(True, which='both')
-ax.legend(facecolor='#ffffff', edgecolor='#b8d8d8', fontsize=10, loc='upper left')
+ax.legend(facecolor='#ffffff', edgecolor='#b0bec5', fontsize=10, loc='upper left')
 
-# Pastel-styled annotations
+# Standard annotations for clarity
 for i, (date, price) in enumerate(zip(ticker_df['Date'], ticker_df['Close'])):
     if i % (len(ticker_df) // 8) == 0:
         ax.annotate(f'${price:.2f}\n{date.strftime("%Y-%m-%d")}',
                     xy=(date, price), xytext=(0, 20),
                     textcoords='offset points', ha='center', fontsize=8,
-                    color='#4a4a4a',
-                    bbox=dict(boxstyle='round,pad=0.4', fc='#b8d8d8', ec='#7a9eb1', alpha=0.9))
+                    color='#000000',
+                    bbox=dict(boxstyle='round,pad=0.4', fc='#e3f2fd', ec='#1565c0', alpha=0.9))
 
 plt.tight_layout()
 st.pyplot(fig)
 
 # Prediction section
-st.header("Predict Next Day's Closing Price")
+st.header("Predict Next Day's Closing Price 🔮")
 ticker = st.selectbox("Choose a company for prediction:", tickers, key="predict_ticker")
 st.write(f"Enter the last 5 days of {ticker} closing prices.")
 
@@ -248,10 +246,10 @@ for i in range(5):
     close = st.number_input(f"Day {i+1} Close Price", min_value=0.0, value=100.0, step=0.01, key=f"close_{ticker}_{i}")
     close_prices.append(close)
 
-if len(close_prices) == 5 and st.button("Predict Next Day's Closing Price", key=f"predict_{ticker}"):
+if len(close_prices) == 5 and st.button("Predict Next Day's Closing Price 🚀", key=f"predict_{ticker}"):
     close_series = pd.Series(close_prices)
     ma10_values = close_series.rolling(window=5).mean().iloc[-5:].tolist()
     returns = close_series.pct_change().iloc[-5:].fillna(0).tolist()
     input_data = np.concatenate([close_prices, ma10_values, returns]).reshape(1, -15)
     prediction = models[ticker].predict(input_data)
-    st.success(f"Predicted {ticker} Closing Price for the next day: ${prediction[0]:.2f}")
+    st.success(f"Predicted {ticker} Closing Price for the next day: ${prediction[0]:.2f} 🎉")
