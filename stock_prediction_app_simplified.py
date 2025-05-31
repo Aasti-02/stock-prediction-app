@@ -8,20 +8,20 @@ from matplotlib.dates import DateFormatter, YearLocator, MonthLocator
 # Set page configuration for a wide, professional layout
 st.set_page_config(page_title="Stock Price Predictor 📈", layout="wide")
 
-# Custom CSS for a refined pastel green and white theme
+# Custom CSS for a neutral gray and white theme
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto:wght@300;400;700&display=swap');
     
     .main {
-        background: linear-gradient(135deg, #ABFAA9 0%, #ffffff 100%);
+        background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
         padding: 40px;
         border-radius: 20px;
-        box-shadow: 0 4px 20px rgba(171, 250, 169, 0.2);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     }
     h1 {
         font-family: 'Poppins', sans-serif;
-        color: #2e7d32;
+        color: #424242;
         font-size: 2.8em;
         font-weight: 600;
         text-align: center;
@@ -29,7 +29,7 @@ st.markdown("""
     }
     h2 {
         font-family: 'Poppins', sans-serif;
-        color: #388e3c;
+        color: #424242;
         font-size: 1.8em;
         font-weight: 500;
         margin-top: 30px;
@@ -37,7 +37,7 @@ st.markdown("""
     }
     .stSelectbox, .stNumberInput > div > div > input {
         background-color: #ffffff;
-        border: 2px solid #ABFAA9;
+        border: 2px solid #e0e0e0;
         border-radius: 12px;
         color: #2e2e2e;
         font-family: 'Roboto', sans-serif;
@@ -46,12 +46,12 @@ st.markdown("""
         transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
     .stSelectbox:hover, .stNumberInput > div > div > input:hover {
-        border-color: #388e3c;
-        box-shadow: 0 2px 10px rgba(56, 142, 60, 0.2);
+        border-color: #bdbdbd;
+        box-shadow: 0 2px 10px rgba(189, 189, 189, 0.2);
     }
     .stButton > button {
-        background: linear-gradient(45deg, #ABFAA9, #ffffff);
-        color: #2e7d32;
+        background: linear-gradient(45deg, #e0e0e0, #ffffff);
+        color: #424242;
         border: none;
         border-radius: 12px;
         font-family: 'Poppins', sans-serif;
@@ -59,20 +59,20 @@ st.markdown("""
         font-size: 0.95em;
         padding: 12px 30px;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
-        box-shadow: 0 2px 10px rgba(171, 250, 169, 0.3);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
     .stButton > button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(56, 142, 60, 0.4);
+        box-shadow: 0 4px 15px rgba(189, 189, 189, 0.3);
     }
     .stSuccess {
-        background: linear-gradient(45deg, #81c784, #c8e6c9);
+        background: linear-gradient(45deg, #90caf9, #bbdefb);
         border-radius: 12px;
         padding: 15px;
         color: #2e2e2e;
         font-family: 'Roboto', sans-serif;
         font-size: 0.95em;
-        box-shadow: 0 2px 10px rgba(129, 199, 132, 0.3);
+        box-shadow: 0 2px 10px rgba(144, 202, 249, 0.3);
         text-align: center;
         margin-top: 20px;
     }
@@ -86,73 +86,15 @@ st.markdown("""
         color: #ffffff;
         font-weight: 700;
     }
-    /* Hamburger menu styling */
-    .hamburger {
-        cursor: pointer;
-        padding: 8px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        width: 28px;
-        height: 22px;
-        background: transparent;
-        border: none;
-    }
-    .hamburger span {
-        width: 100%;
-        height: 3px;
-        background: #388e3c;
-        border-radius: 2px;
-        transition: all 0.3s ease;
-        box-shadow: 0 0 5px rgba(56, 142, 60, 0.4);
-    }
-    .hamburger:hover span {
-        background: #ABFAA9;
-        box-shadow: 0 0 8px rgba(171, 250, 169, 0.6);
-    }
-    .sidebar-content {
-        background: #ffffff;
+    .stock-basics-container {
+        background: #f5f5f5;
         border-radius: 12px;
         padding: 20px;
-        box-shadow: 0 2px 10px rgba(171, 250, 169, 0.2);
-        margin-top: 15px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        margin-top: 30px;
     }
     </style>
 """, unsafe_allow_html=True)
-
-# Hamburger menu toggle
-if 'show_stock_info' not in st.session_state:
-    st.session_state.show_stock_info = False
-
-# Hamburger menu button in sidebar
-with st.sidebar:
-    if st.button("☰ Stock Basics", key="hamburger"):
-        st.session_state.show_stock_info = not st.session_state.show_stock_info
-    
-    if st.session_state.show_stock_info:
-        st.markdown('<div class="sidebar-content">', unsafe_allow_html=True)
-        st.header("Stock Market Basics 📚")
-        st.markdown("""
-            - **What is a stock?**  
-              A stock represents ownership in a company, giving you a share of its profits and growth.
-            - **What is the stock market?**  
-              A marketplace (e.g., NYSE, Nasdaq) where stocks are bought and sold based on supply and demand.
-            - **What determines stock prices?**  
-              Prices are driven by company performance, market demand, and economic factors.
-            - **What is a bull market?**  
-              A period when stock prices rise, reflecting investor optimism 🐂.
-            - **What is a bear market?**  
-              A period when stock prices fall, indicating investor pessimism 🐻.
-            - **What are dividends?**  
-              Payments from a company’s profits to shareholders, often quarterly.
-            - **What is trading?**  
-              Buying and selling stocks to profit from price changes, including day trading for short-term gains.
-            - **What are risk and return?**  
-              Stocks offer high potential returns but carry risks; diversification helps manage risk.
-            - **What are market indices?**  
-              Metrics like the S&P 500 or Dow Jones track a group of stocks to show market trends 📊.
-        """)
-        st.markdown('</div>', unsafe_allow_html=True)
 
 st.title("Stock Price Predictor 📈")
 
@@ -264,3 +206,28 @@ if len(close_prices) == 5 and st.button("Predict Next Day's Closing Price 🚀",
     input_data = np.concatenate([close_prices, ma10_values, returns]).reshape(1, -15)
     prediction = models[ticker].predict(input_data)
     st.success(f"Predicted {ticker} Closing Price for the next day: ${prediction[0]:.2f} 🎉")
+
+# Stock Market Basics section moved to main page
+st.header("Stock Market Basics 📚")
+st.markdown('<div class="stock-basics-container">', unsafe_allow_html=True)
+st.markdown("""
+    - **What is a stock?**  
+      A stock represents ownership in a company, giving you a share of its profits and growth.
+    - **What is the stock market?**  
+      A marketplace (e.g., NYSE, Nasdaq) where stocks are bought and sold based on supply and demand.
+    - **What determines stock prices?**  
+      Prices are driven by company performance, market demand, and economic factors.
+    - **What is a bull market?**  
+      A period when stock prices rise, reflecting investor optimism 🐂.
+    - **What is a bear market?**  
+      A period when stock prices fall, indicating investor pessimism 🐻.
+    - **What are dividends?**  
+      Payments from a company’s profits to shareholders, often quarterly.
+    - **What is trading?**  
+      Buying and selling stocks to profit from price changes, including day trading for short-term gains.
+    - **What are risk and return?**  
+      Stocks offer high potential returns but carry risks; diversification helps manage risk.
+    - **What are market indices?**  
+      Metrics like the S&P 500 or Dow Jones track a group of stocks to show market trends 📊.
+""")
+st.markdown('</div>', unsafe_allow_html=True)
