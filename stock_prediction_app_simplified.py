@@ -2,12 +2,15 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
+import matplotlib.pyplot as plt
+from matplotlib.dates import DateFormatter, YearLocator, MonthLocator
 
 st.title("Stock Price Prediction for AAPL, MSFT, NFLX, GOOG")
 
 @st.cache_data
 def load_data():
     df = pd.read_csv('stocks.csv')
+    df['Date'] = pd.to_datetime(df['Date'])  # Ensure 'Date' column is in datetime format
     df['MA10'] = df.groupby('Ticker')['Close'].rolling(window=10).mean().reset_index(0, drop=True)
     df['Return'] = df.groupby('Ticker')['Close'].pct_change()
     df = df.dropna()
@@ -24,6 +27,7 @@ def create_features(data, N):
         y.append(data['Close'].values[i])
     return np.array(X), np.array(y)
 
+# Load data and train models
 df = load_data()
 models = {}
 tickers = ['AAPL', 'MSFT', 'NFLX', 'GOOG']
@@ -34,14 +38,31 @@ for ticker in tickers:
     model.fit(X, y)
     models[ticker] = model
 
-import matplotlib.pyplot as plt
-fig, ax = plt.subplots()
-ticker_df = df[df['Ticker'] == ticker]
-ax.plot(ticker_df['Date'], ticker_df['Close'])
+# Plotting the stock price with improved date formatting
+st.header("Stock Price History")
+ticker = st.selectbox("Choose a company to view historical prices:", tickers, key="plot_ticker")
+ticker_df = df[df['Ticker'] == ticker].copy()
+
+fig, ax = plt.subplots(figsize=(10, 6))  # Increase figure size for better visibility
+ax.plot(ticker_df['Date'], ticker_df['Close'], label=f'{ticker} Closing Price', color='blue')
+ax.set_title(f'{ticker} Stock Price Over Time', fontsize=14)
+ax.set_xlabel('Year', fontsize=12)
+ax.set_ylabel('Closing Price ($)', fontsize=12)
+
+# Improve x-axis date formatting
+ax.xaxis.set_major_locator(YearLocator())  # Show only years on major ticks
+ax.xaxis.set_minor_locator(MonthLocator())  # Optional: add minor ticks for months
+ax.xaxis.set_major_formatter(DateFormatter('%Y'))  # Format as year only
+plt.xticks(rotation=45, ha='right')  # Rotate labels for better readability
+ax.grid(True, which='both', linestyle='--', linewidth=0.5)  # Add grid for clarity
+ax.legend()
+
+plt.tight_layout()  # Adjust layout to prevent label cutoff
 st.pyplot(fig)
 
-st.header("Select a Company and Enter Closing Prices")
-ticker = st.selectbox("Choose a company:", tickers)
+# Prediction section
+st.header("Predict Next Day's Closing Price")
+ticker = st.selectbox("Choose a company for prediction:", tickers, key="predict_ticker")
 st.write(f"Enter the last 5 days of {ticker} closing prices.")
 
 close_prices = []
