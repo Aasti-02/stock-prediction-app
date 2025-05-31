@@ -3,14 +3,66 @@ import pandas as pd
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 import matplotlib.pyplot as plt
-from matplotlib.dates import DateFormatter, YearLocator, MonthLocator, AutoDateLocator
+from matplotlib.dates import DateFormatter, YearLocator, MonthLocator
+import seaborn as sns
 
-st.title("Stock Price Prediction for AAPL, MSFT, NFLX, GOOG")
+# Set page configuration for a modern layout
+st.set_page_config(page_title="Stock Price Predictor", layout="wide")
+
+# Custom CSS for a cool, modern look
+st.markdown("""
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+    
+    .main {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        padding: 20px;
+        border-radius: 10px;
+    }
+    h1, h2, h3 {
+        font-family: 'Poppins', sans-serif;
+        color: #ffffff;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    }
+    .stSelectbox, .stNumberInput > div > div > input {
+        background-color: #ffffff;
+        border-radius: 8px;
+        border: 1px solid #4CAF50;
+        font-family: 'Poppins', sans-serif;
+        color: #333;
+    }
+    .stButton > button {
+        background-color: #4CAF50;
+        color: white;
+        border-radius: 8px;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        padding: 10px 20px;
+        transition: background-color 0.3s;
+    }
+    .stButton > button:hover {
+        background-color: #45a049;
+    }
+    .stSuccess {
+        background-color: #2ecc71;
+        border-radius: 8px;
+        padding: 10px;
+        color: white;
+        font-family: 'Poppins', sans-serif;
+    }
+    .stMarkdown p {
+        font-family: 'Poppins', sans-serif;
+        color: #e0e0e0;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+st.title("Stock Price Predictor")
 
 @st.cache_data
 def load_data():
     df = pd.read_csv('stocks.csv')
-    df['Date'] = pd.to_datetime(df['Date'])  # Ensure 'Date' column is in datetime format
+    df['Date'] = pd.to_datetime(df['Date'])
     df['MA10'] = df.groupby('Ticker')['Close'].rolling(window=10).mean().reset_index(0, drop=True)
     df['Return'] = df.groupby('Ticker')['Close'].pct_change()
     df = df.dropna()
@@ -38,43 +90,50 @@ for ticker in tickers:
     model.fit(X, y)
     models[ticker] = model
 
-# Plotting the stock price with clear year and date information
+# Plotting section with a cool graph
 st.header("Stock Price History")
 ticker = st.selectbox("Choose a company to view historical prices:", tickers, key="plot_ticker")
 ticker_df = df[df['Ticker'] == ticker].copy()
 
-fig, ax = plt.subplots(figsize=(12, 6))  # Larger figure for better visibility
-ax.plot(ticker_df['Date'], ticker_df['Close'], label=f'{ticker} Closing Price', color='blue')
-ax.set_title(f'{ticker} Stock Price Over Time', fontsize=14)
-ax.set_xlabel('Date', fontsize=12)
-ax.set_ylabel('Closing Price ($)', fontsize=12)
+# Use seaborn style for a modern look
+plt.style.use('seaborn')
+fig, ax = plt.subplots(figsize=(12, 6))
+ax.plot(ticker_df['Date'], ticker_df['Close'], label=f'{ticker} Closing Price', color='#4CAF50', linewidth=2)
+ax.set_title(f'{ticker} Stock Price Over Time', fontsize=16, fontweight='bold', color='#ffffff')
+ax.set_xlabel('Date', fontsize=12, color='#ffffff')
+ax.set_ylabel('Closing Price ($)', fontsize=12, color='#ffffff')
 
-# Dynamic date formatting based on data range
+# Dynamic date formatting
 date_range = (ticker_df['Date'].max() - ticker_df['Date'].min()).days
-if date_range > 365 * 5:  # If data spans more than 5 years, show years
+if date_range > 365 * 5:
     ax.xaxis.set_major_locator(YearLocator())
     ax.xaxis.set_major_formatter(DateFormatter('%Y'))
     ax.xaxis.set_minor_locator(MonthLocator())
-elif date_range > 365:  # If data spans 1-5 years, show year and month
+elif date_range > 365:
     ax.xaxis.set_major_locator(YearLocator())
     ax.xaxis.set_major_formatter(DateFormatter('%Y'))
     ax.xaxis.set_minor_locator(MonthLocator())
     ax.xaxis.set_minor_formatter(DateFormatter('%b'))
-else:  # If data spans less than a year, show months and days
-    ax.xaxis.set_major_locator(AutoDateLocator())
+else:
+    ax.xaxis.set_major_locator(MonthLocator())
     ax.xaxis.set_major_formatter(DateFormatter('%b %Y'))
 
-plt.xticks(rotation=45, ha='right', fontsize=10)  # Rotate and align labels
-ax.grid(True, which='both', linestyle='--', linewidth=0.5)  # Add grid
-ax.legend()
+# Customize axes and grid
+ax.tick_params(axis='x', colors='#e0e0e0', labelsize=10, rotation=45)
+ax.tick_params(axis='y', colors='#e0e0e0', labelsize=10)
+ax.grid(True, which='both', linestyle='--', linewidth=0.5, color='#e0e0e0')
+ax.set_facecolor('#2a5298')
+fig.patch.set_facecolor('#1e3c72')
+ax.legend(facecolor='#ffffff', edgecolor='#4CAF50', fontsize=10)
 
-# Optional: Add hover-like annotation in Streamlit (simulated with a tooltip-like text)
+# Add stylish annotations
 for i, (date, price) in enumerate(zip(ticker_df['Date'], ticker_df['Close'])):
-    if i % (len(ticker_df) // 10) == 0:  # Annotate every 10th point to avoid clutter
-        ax.annotate(f'{price:.2f}\n{date.strftime("%Y-%m-%d")}',
-                    xy=(date, price), xytext=(0, 10),
-                    textcoords='offset points', ha='center', fontsize=8,
-                    bbox=dict(boxstyle='round,pad=0.3', fc='yellow', alpha=0.5))
+    if i % (len(ticker_df) // 8) == 0:
+        ax.annotate(f'${price:.2f}\n{date.strftime("%Y-%m-%d")}',
+                    xy=(date, price), xytext=(0, 15),
+                    textcoords='offset points', ha='center', fontsize=9,
+                    color='#ffffff',
+                    bbox=dict(boxstyle='round,pad=0.3', fc='#4CAF50', ec='#ffffff', alpha=0.8))
 
 plt.tight_layout()
 st.pyplot(fig)
