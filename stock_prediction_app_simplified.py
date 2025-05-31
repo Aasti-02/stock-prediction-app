@@ -4,6 +4,7 @@ import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter, YearLocator, MonthLocator
+import seaborn as sns
 
 # Set page configuration for a modern layout
 st.set_page_config(page_title="Stock Price Predictor", layout="wide")
@@ -89,34 +90,20 @@ for ticker in tickers:
     model.fit(X, y)
     models[ticker] = model
 
-# Plotting section with a custom-styled graph
+# Plotting section with a cool graph
 st.header("Stock Price History")
 ticker = st.selectbox("Choose a company to view historical prices:", tickers, key="plot_ticker")
 ticker_df = df[df['Ticker'] == ticker].copy()
 
-# Custom Matplotlib style for a modern look
-plt.rcParams.update({
-    'axes.facecolor': '#2a5298',
-    'figure.facecolor': '#1e3c72',
-    'axes.edgecolor': '#e0e0e0',
-    'axes.labelcolor': '#ffffff',
-    'xtick.color': '#e0e0e0',
-    'ytick.color': '#e0e0e0',
-    'text.color': '#ffffff',
-    'grid.color': '#e0e0e0',
-    'grid.linestyle': '--',
-    'grid.linewidth': 0.5,
-    'font.family': 'sans-serif',
-    'font.sans-serif': ['Poppins', 'Arial', 'sans-serif']
-})
-
+# Use seaborn style for a modern look
+plt.style.use('seaborn')
 fig, ax = plt.subplots(figsize=(12, 6))
-ax.plot(ticker_df['Date'], ticker_df['Close'], label=f'{ticker} Closing Price', color='#4CAF50', linewidth=2.5)
-ax.set_title(f'{ticker} Stock Price Over Time', fontsize=16, fontweight='bold')
-ax.set_xlabel('Date', fontsize=12)
-ax.set_ylabel('Closing Price ($)', fontsize=12)
+ax.plot(ticker_df['Date'], ticker_df['Close'], label=f'{ticker} Closing Price', color='#4CAF50', linewidth=2)
+ax.set_title(f'{ticker} Stock Price Over Time', fontsize=16, fontweight='bold', color='#ffffff')
+ax.set_xlabel('Date', fontsize=12, color='#ffffff')
+ax.set_ylabel('Closing Price ($)', fontsize=12, color='#ffffff')
 
-# Dynamic date formatting for clear year visibility
+# Dynamic date formatting
 date_range = (ticker_df['Date'].max() - ticker_df['Date'].min()).days
 if date_range > 365 * 5:
     ax.xaxis.set_major_locator(YearLocator())
@@ -131,12 +118,15 @@ else:
     ax.xaxis.set_major_locator(MonthLocator())
     ax.xaxis.set_major_formatter(DateFormatter('%b %Y'))
 
-ax.tick_params(axis='x', labelsize=10, rotation=45)
-ax.tick_params(axis='y', labelsize=10)
-ax.grid(True, which='both')
+# Customize axes and grid
+ax.tick_params(axis='x', colors='#e0e0e0', labelsize=10, rotation=45)
+ax.tick_params(axis='y', colors='#e0e0e0', labelsize=10)
+ax.grid(True, which='both', linestyle='--', linewidth=0.5, color='#e0e0e0')
+ax.set_facecolor('#2a5298')
+fig.patch.set_facecolor('#1e3c72')
 ax.legend(facecolor='#ffffff', edgecolor='#4CAF50', fontsize=10)
 
-# Stylish annotations for key points
+# Add stylish annotations
 for i, (date, price) in enumerate(zip(ticker_df['Date'], ticker_df['Close'])):
     if i % (len(ticker_df) // 8) == 0:
         ax.annotate(f'${price:.2f}\n{date.strftime("%Y-%m-%d")}',
