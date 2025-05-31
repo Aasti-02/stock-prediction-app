@@ -6,107 +6,107 @@ import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter, YearLocator, MonthLocator
 
 # Set page configuration for a wide, modern layout
-st.set_page_config(page_title="Neon Stock Predictor", layout="wide")
+st.set_page_config(page_title="Stock Price Predictor", layout="wide")
 
-# Custom CSS for a vibrant, cyberpunk look with hamburger menu
+# Custom CSS for a pastel color theme and hamburger menu
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto:wght@300;400;700&display=swap');
     
     .main {
-        background: linear-gradient(135deg, #0a0e1a 0%, #1e2a47 100%);
+        background: linear-gradient(135deg, #f0e6ef 0%, #b8d8d8 100%);
         padding: 30px;
         border-radius: 15px;
-        box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
+        box-shadow: 0 0 15px rgba(135, 182, 194, 0.3);
     }
     h1 {
-        font-family: 'Orbitron', sans-serif;
-        color: #00f7ff;
-        text-shadow: 0 0 12px #00f7ff, 0 0 24px #00f7ff;
-        font-size: 2.8em;
+        font-family: 'Poppins', sans-serif;
+        color: #7a9eb1;
+        text-shadow: 0 0 8px rgba(135, 182, 194, 0.5);
+        font-size: 2.5em;
         text-align: center;
     }
     h2 {
-        font-family: 'Orbitron', sans-serif;
-        color: #ff00a1;
-        text-shadow: 0 0 10px #ff00a1;
-        font-size: 1.9em;
+        font-family: 'Poppins', sans-serif;
+        color: #ef959d;
+        text-shadow: 0 0 6px rgba(239, 149, 157, 0.5);
+        font-size: 1.7em;
     }
     .stSelectbox, .stNumberInput > div > div > input {
-        background-color: #1e2a47;
-        border: 2px solid #00f7ff;
-        border-radius: 12px;
-        color: #ffffff;
+        background-color: #ffffff;
+        border: 2px solid #b8d8d8;
+        border-radius: 10px;
+        color: #4a4a4a;
         font-family: 'Roboto', sans-serif;
-        padding: 10px;
+        padding: 8px;
         transition: border-color 0.3s;
     }
     .stSelectbox:hover, .stNumberInput > div > div > input:hover {
-        border-color: #ff00a1;
+        border-color: #ef959d;
     }
     .stButton > button {
-        background: linear-gradient(45deg, #ff00a1, #00f7ff);
+        background: linear-gradient(45deg, #ef959d, #b8d8d8);
         color: #ffffff;
         border: none;
-        border-radius: 12px;
-        font-family: 'Orbitron', sans-serif;
-        font-weight: 700;
-        padding: 12px 30px;
+        border-radius: 10px;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        padding: 10px 25px;
         transition: transform 0.3s, box-shadow 0.3s;
-        box-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
+        box-shadow: 0 0 10px rgba(135, 182, 194, 0.4);
     }
     .stButton > button:hover {
-        transform: scale(1.1);
-        box-shadow: 0 0 25px rgba(255, 0, 161, 0.8);
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(239, 149, 157, 0.6);
     }
     .stSuccess {
-        background: linear-gradient(45deg, #2ecc71, #27ae60);
-        border-radius: 12px;
-        padding: 15px;
-        color: #ffffff;
+        background: linear-gradient(45deg, #a8e6cf, #dcedc1);
+        border-radius: 10px;
+        padding: 12px;
+        color: #4a4a4a;
         font-family: 'Roboto', sans-serif;
-        box-shadow: 0 0 15px rgba(46, 204, 113, 0.6);
+        box-shadow: 0 0 10px rgba(168, 230, 207, 0.4);
         text-align: center;
     }
     .stMarkdown p, .stMarkdown li {
         font-family: 'Roboto', sans-serif;
-        color: #d0d8ff;
-        font-size: 1.2em;
+        color: #4a4a4a;
+        font-size: 0.9em;
+    }
+    .stMarkdown strong {
+        color: #7a9eb1;
+        font-weight: 700;
     }
     /* Hamburger menu styling */
     .hamburger {
         cursor: pointer;
-        padding: 10px;
+        padding: 8px;
         display: flex;
         flex-direction: column;
         justify-content: space-around;
-        width: 30px;
-        height: 25px;
+        width: 25px;
+        height: 20px;
         background: transparent;
         border: none;
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        z-index: 1000;
     }
     .hamburger span {
         width: 100%;
-        height: 4px;
-        background: #00f7ff;
+        height: 3px;
+        background: #ef959d;
         border-radius: 2px;
         transition: all 0.3s ease;
-        box-shadow: 0 0 8px #00f7ff;
+        box-shadow: 0 0 5px rgba(239, 149, 157, 0.5);
     }
     .hamburger:hover span {
-        background: #ff00a1;
-        box-shadow: 0 0 12px #ff00a1;
+        background: #b8d8d8;
+        box-shadow: 0 0 8px rgba(184, 216, 216, 0.7);
     }
     .sidebar-content {
-        background: #1e2a47;
+        background: #ffffff;
         border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-        margin-top: 20px;
+        padding: 15px;
+        box-shadow: 0 0 10px rgba(135, 182, 194, 0.3);
+        margin-top: 10px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -115,41 +115,37 @@ st.markdown("""
 if 'show_stock_info' not in st.session_state:
     st.session_state.show_stock_info = False
 
-# Hamburger menu button
-st.markdown("""
-    <div class="hamburger" onclick="document.getElementById('stock-info').style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none';">
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
-""", unsafe_allow_html=True)
-
-# Sidebar content (hidden by default)
+# Hamburger menu button in sidebar
 with st.sidebar:
-    st.markdown('<div id="stock-info" style="display:none;" class="sidebar-content">', unsafe_allow_html=True)
-    st.header("Stock Market Basics")
-    st.markdown("""
-        ### General Knowledge About Stocks
-        - **What is a Stock?**  
-          A stock represents ownership in a company. When you buy a stock, you own a small part of that company and may benefit from its profits or growth.
-        - **Stock Market**  
-          A marketplace where stocks are bought and sold, like the New York Stock Exchange (NYSE) or Nasdaq. It reflects supply and demand for shares.
-        - **Stock Price**  
-          The price of a single share, determined by market demand, company performance, and economic factors.
-        - **Bull vs. Bear Market**  
-          A **bull market** is when stock prices are rising, indicating optimism. A **bear market** is when prices are falling, indicating pessimism.
-        - **Dividends**  
-          Payments made by some companies to shareholders from profits, usually quarterly, as a reward for holding the stock.
-        - **Trading**  
-          Buying and selling stocks to profit from price changes. Day trading involves frequent trades within a single day.
-        - **Risk and Return**  
-          Stocks can offer high returns but come with risks. Diversification (owning multiple stocks) can reduce risk.
-        - **Market Indices**  
-          Metrics like the S&P 500 or Dow Jones track the performance of a group of stocks, reflecting overall market trends.
-    """)
-    st.markdown('</div>', unsafe_allow_html=True)
+    if st.button("☰", key="hamburger"):
+        st.session_state.show_stock_info = not st.session_state.show_stock_info
+    
+    if st.session_state.show_stock_info:
+        st.markdown('<div class="sidebar-content">', unsafe_allow_html=True)
+        st.header("Stock Market Basics")
+        st.markdown("""
+            - **What is a stock?**  
+              A stock represents ownership in a company, giving you a share of its profits and growth.
+            - **What is the stock market?**  
+              A marketplace (e.g., NYSE, Nasdaq) where stocks are bought and sold based on supply and demand.
+            - **What determines stock prices?**  
+              Prices are driven by company performance, market demand, and economic factors.
+            - **What is a bull market?**  
+              A period when stock prices rise, reflecting investor optimism.
+            - **What is a bear market?**  
+              A period when stock prices fall, indicating investor pessimism.
+            - **What are dividends?**  
+              Payments from a company’s profits to shareholders, often quarterly.
+            - **What is trading?**  
+              Buying and selling stocks to profit from price changes, including day trading for short-term gains.
+            - **What are risk and return?**  
+              Stocks offer high potential returns but carry risks; diversification helps manage risk.
+            - **What are market indices?**  
+              Metrics like the S&P 500 or Dow Jones track a group of stocks to show market trends.
+        """)
+        st.markdown('</div>', unsafe_allow_html=True)
 
-st.title("Neon Stock Price Predictor")
+st.title("Stock Price Predictor")
 
 @st.cache_data
 def load_data():
@@ -182,33 +178,33 @@ for ticker in tickers:
     model.fit(X, y)
     models[ticker] = model
 
-# Plotting section with a vibrant graph
+# Plotting section with a pastel-styled graph
 st.header("Stock Price History")
 ticker = st.selectbox("Choose a company to view historical prices:", tickers, key="plot_ticker")
 ticker_df = df[df['Ticker'] == ticker].copy()
 
-# Custom Matplotlib style for a neon, futuristic look
+# Custom Matplotlib style for a pastel look
 plt.rcParams.update({
-    'axes.facecolor': '#0a0e1a',
-    'figure.facecolor': '#1e2a47',
-    'axes.edgecolor': '#00f7ff',
-    'axes.labelcolor': '#00f7ff',
-    'xtick.color': '#00f7ff',
-    'ytick.color': '#00f7ff',
-    'text.color': '#00f7ff',
-    'grid.color': '#00f7ff',
+    'axes.facecolor': '#f0e6ef',
+    'figure.facecolor': '#ffffff',
+    'axes.edgecolor': '#7a9eb1',
+    'axes.labelcolor': '#7a9eb1',
+    'xtick.color': '#7a9eb1',
+    'ytick.color': '#7a9eb1',
+    'text.color': '#7a9eb1',
+    'grid.color': '#b8d8d8',
     'grid.linestyle': ':',
-    'grid.linewidth': 0.8,
+    'grid.linewidth': 0.7,
     'font.family': 'sans-serif',
     'font.sans-serif': ['Roboto', 'Arial', 'sans-serif']
 })
 
 fig, ax = plt.subplots(figsize=(14, 7))
 ax.plot(ticker_df['Date'], ticker_df['Close'], label=f'{ticker} Closing Price', 
-        color='#ff00a1', linewidth=4)
-ax.set_title(f'{ticker} Stock Price Over Time', fontsize=18, fontweight='bold', fontfamily='Orbitron')
-ax.set_xlabel('Date', fontsize=14)
-ax.set_ylabel('Closing Price ($)', fontsize=14)
+        color='#ef959d', linewidth=3.5)
+ax.set_title(f'{ticker} Stock Price Over Time', fontsize=16, fontweight='bold', fontfamily='Poppins')
+ax.set_xlabel('Date', fontsize=12)
+ax.set_ylabel('Closing Price ($)', fontsize=12)
 
 # Dynamic date formatting for clear year visibility
 date_range = (ticker_df['Date'].max() - ticker_df['Date'].min()).days
@@ -225,19 +221,19 @@ else:
     ax.xaxis.set_major_locator(MonthLocator())
     ax.xaxis.set_major_formatter(DateFormatter('%b %Y'))
 
-ax.tick_params(axis='x', labelsize=12, rotation=45)
-ax.tick_params(axis='y', labelsize=12)
+ax.tick_params(axis='x', labelsize=10, rotation=45)
+ax.tick_params(axis='y', labelsize=10)
 ax.grid(True, which='both')
-ax.legend(facecolor='#1e2a47', edgecolor='#00f7ff', fontsize=12, loc='upper left')
+ax.legend(facecolor='#ffffff', edgecolor='#b8d8d8', fontsize=10, loc='upper left')
 
-# Neon-styled annotations
+# Pastel-styled annotations
 for i, (date, price) in enumerate(zip(ticker_df['Date'], ticker_df['Close'])):
     if i % (len(ticker_df) // 8) == 0:
         ax.annotate(f'${price:.2f}\n{date.strftime("%Y-%m-%d")}',
-                    xy=(date, price), xytext=(0, 25),
-                    textcoords='offset points', ha='center', fontsize=10,
-                    color='#ffffff',
-                    bbox=dict(boxstyle='round,pad=0.4', fc='#ff00a1', ec='#00f7ff', alpha=0.9))
+                    xy=(date, price), xytext=(0, 20),
+                    textcoords='offset points', ha='center', fontsize=8,
+                    color='#4a4a4a',
+                    bbox=dict(boxstyle='round,pad=0.4', fc='#b8d8d8', ec='#7a9eb1', alpha=0.9))
 
 plt.tight_layout()
 st.pyplot(fig)
