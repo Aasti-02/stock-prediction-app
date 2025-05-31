@@ -8,7 +8,7 @@ from matplotlib.dates import DateFormatter, YearLocator, MonthLocator
 # Set page configuration for a wide, modern layout
 st.set_page_config(page_title="Neon Stock Predictor", layout="wide")
 
-# Custom CSS for a vibrant, cyberpunk look
+# Custom CSS for a vibrant, cyberpunk look with hamburger menu
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap');
@@ -68,13 +68,86 @@ st.markdown("""
         box-shadow: 0 0 15px rgba(46, 204, 113, 0.6);
         text-align: center;
     }
-    .stMarkdown p {
+    .stMarkdown p, .stMarkdown li {
         font-family: 'Roboto', sans-serif;
         color: #d0d8ff;
         font-size: 1.2em;
     }
+    /* Hamburger menu styling */
+    .hamburger {
+        cursor: pointer;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        width: 30px;
+        height: 25px;
+        background: transparent;
+        border: none;
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1000;
+    }
+    .hamburger span {
+        width: 100%;
+        height: 4px;
+        background: #00f7ff;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 8px #00f7ff;
+    }
+    .hamburger:hover span {
+        background: #ff00a1;
+        box-shadow: 0 0 12px #ff00a1;
+    }
+    .sidebar-content {
+        background: #1e2a47;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        margin-top: 20px;
+    }
     </style>
 """, unsafe_allow_html=True)
+
+# Hamburger menu toggle
+if 'show_stock_info' not in st.session_state:
+    st.session_state.show_stock_info = False
+
+# Hamburger menu button
+st.markdown("""
+    <div class="hamburger" onclick="document.getElementById('stock-info').style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none';">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+""", unsafe_allow_html=True)
+
+# Sidebar content (hidden by default)
+with st.sidebar:
+    st.markdown('<div id="stock-info" style="display:none;" class="sidebar-content">', unsafe_allow_html=True)
+    st.header("Stock Market Basics")
+    st.markdown("""
+        ### General Knowledge About Stocks
+        - **What is a Stock?**  
+          A stock represents ownership in a company. When you buy a stock, you own a small part of that company and may benefit from its profits or growth.
+        - **Stock Market**  
+          A marketplace where stocks are bought and sold, like the New York Stock Exchange (NYSE) or Nasdaq. It reflects supply and demand for shares.
+        - **Stock Price**  
+          The price of a single share, determined by market demand, company performance, and economic factors.
+        - **Bull vs. Bear Market**  
+          A **bull market** is when stock prices are rising, indicating optimism. A **bear market** is when prices are falling, indicating pessimism.
+        - **Dividends**  
+          Payments made by some companies to shareholders from profits, usually quarterly, as a reward for holding the stock.
+        - **Trading**  
+          Buying and selling stocks to profit from price changes. Day trading involves frequent trades within a single day.
+        - **Risk and Return**  
+          Stocks can offer high returns but come with risks. Diversification (owning multiple stocks) can reduce risk.
+        - **Market Indices**  
+          Metrics like the S&P 500 or Dow Jones track the performance of a group of stocks, reflecting overall market trends.
+    """)
+    st.markdown('</div>', unsafe_allow_html=True)
 
 st.title("Neon Stock Price Predictor")
 
