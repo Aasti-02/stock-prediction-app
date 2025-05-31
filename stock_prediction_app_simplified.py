@@ -4,60 +4,73 @@ import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter, YearLocator, MonthLocator
-import seaborn as sns
 
-# Set page configuration for a modern layout
-st.set_page_config(page_title="Stock Price Predictor", layout="wide")
+# Set page configuration for a wide, modern layout
+st.set_page_config(page_title="Futuristic Stock Predictor", layout="wide")
 
-# Custom CSS for a cool, modern look
+# Custom CSS for a cyberpunk-inspired, vibrant look
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap');
     
     .main {
-        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-        padding: 20px;
-        border-radius: 10px;
+        background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
     }
-    h1, h2, h3 {
-        font-family: 'Poppins', sans-serif;
-        color: #ffffff;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    h1 {
+        font-family: 'Orbitron', sans-serif;
+        color: #00ffcc;
+        text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc;
+        font-size: 2.5em;
+    }
+    h2 {
+        font-family: 'Orbitron', sans-serif;
+        color: #ff007a;
+        text-shadow: 0 0 8px #ff007a;
+        font-size: 1.8em;
     }
     .stSelectbox, .stNumberInput > div > div > input {
-        background-color: #ffffff;
-        border-radius: 8px;
-        border: 1px solid #4CAF50;
-        font-family: 'Poppins', sans-serif;
-        color: #333;
+        background-color: #1b263b;
+        border: 2px solid #00ffcc;
+        border-radius: 10px;
+        color: #ffffff;
+        font-family: 'Roboto', sans-serif;
+        padding: 8px;
     }
     .stButton > button {
-        background-color: #4CAF50;
-        color: white;
-        border-radius: 8px;
-        font-family: 'Poppins', sans-serif;
-        font-weight: 600;
-        padding: 10px 20px;
-        transition: background-color 0.3s;
+        background: linear-gradient(45deg, #ff007a, #00ffcc);
+        color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 700;
+        padding: 12px 24px;
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
     }
     .stButton > button:hover {
-        background-color: #45a049;
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
     }
     .stSuccess {
-        background-color: #2ecc71;
-        border-radius: 8px;
-        padding: 10px;
-        color: white;
-        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(45deg, #2ecc71, #27ae60);
+        border-radius: 10px;
+        padding: 12px;
+        color: #ffffff;
+        font-family: 'Roboto', sans-serif;
+        box-shadow: 0 0 15px rgba(46, 204, 113, 0.5);
     }
     .stMarkdown p {
-        font-family: 'Poppins', sans-serif;
+        font-family: 'Roboto', sans-serif;
         color: #e0e0e0;
+        font-size: 1.1em;
     }
     </style>
 """, unsafe_allow_html=True)
 
-st.title("Stock Price Predictor")
+st.title("Futuristic Stock Price Predictor")
 
 @st.cache_data
 def load_data():
@@ -90,20 +103,35 @@ for ticker in tickers:
     model.fit(X, y)
     models[ticker] = model
 
-# Plotting section with a cool graph
+# Plotting section with a futuristic graph
 st.header("Stock Price History")
 ticker = st.selectbox("Choose a company to view historical prices:", tickers, key="plot_ticker")
 ticker_df = df[df['Ticker'] == ticker].copy()
 
-# Use seaborn style for a modern look
-plt.style.use('seaborn')
-fig, ax = plt.subplots(figsize=(12, 6))
-ax.plot(ticker_df['Date'], ticker_df['Close'], label=f'{ticker} Closing Price', color='#4CAF50', linewidth=2)
-ax.set_title(f'{ticker} Stock Price Over Time', fontsize=16, fontweight='bold', color='#ffffff')
-ax.set_xlabel('Date', fontsize=12, color='#ffffff')
-ax.set_ylabel('Closing Price ($)', fontsize=12, color='#ffffff')
+# Custom Matplotlib style for a cyberpunk look
+plt.rcParams.update({
+    'axes.facecolor': '#0d1b2a',
+    'figure.facecolor': '#1b263b',
+    'axes.edgecolor': '#00ffcc',
+    'axes.labelcolor': '#00ffcc',
+    'xtick.color': '#00ffcc',
+    'ytick.color': '#00ffcc',
+    'text.color': '#00ffcc',
+    'grid.color': '#00ffcc',
+    'grid.linestyle': ':',
+    'grid.linewidth': 0.7,
+    'font.family': 'sans-serif',
+    'font.sans-serif': ['Roboto', 'Arial', 'sans-serif']
+})
 
-# Dynamic date formatting
+fig, ax = plt.subplots(figsize=(14, 7))
+ax.plot(ticker_df['Date'], ticker_df['Close'], label=f'{ticker} Closing Price', 
+        color='#ff007a', linewidth=3, path_effects=[plt.patheffects.withStroke(linewidth=4, foreground='#00ffcc')])
+ax.set_title(f'{ticker} Stock Price Over Time', fontsize=18, fontweight='bold', fontfamily='Orbitron')
+ax.set_xlabel('Date', fontsize=14)
+ax.set_ylabel('Closing Price ($)', fontsize=14)
+
+# Dynamic date formatting for clear year visibility
 date_range = (ticker_df['Date'].max() - ticker_df['Date'].min()).days
 if date_range > 365 * 5:
     ax.xaxis.set_major_locator(YearLocator())
@@ -118,22 +146,20 @@ else:
     ax.xaxis.set_major_locator(MonthLocator())
     ax.xaxis.set_major_formatter(DateFormatter('%b %Y'))
 
-# Customize axes and grid
-ax.tick_params(axis='x', colors='#e0e0e0', labelsize=10, rotation=45)
-ax.tick_params(axis='y', colors='#e0e0e0', labelsize=10)
-ax.grid(True, which='both', linestyle='--', linewidth=0.5, color='#e0e0e0')
-ax.set_facecolor('#2a5298')
-fig.patch.set_facecolor('#1e3c72')
-ax.legend(facecolor='#ffffff', edgecolor='#4CAF50', fontsize=10)
+ax.tick_params(axis='x', labelsize=12, rotation=45)
+ax.tick_params(axis='y', labelsize=12)
+ax.grid(True, which='both')
+ax.legend(facecolor='#1b263b', edgecolor='#00ffcc', fontsize=12, loc='upper left')
 
-# Add stylish annotations
+# Neon-styled annotations
 for i, (date, price) in enumerate(zip(ticker_df['Date'], ticker_df['Close'])):
     if i % (len(ticker_df) // 8) == 0:
         ax.annotate(f'${price:.2f}\n{date.strftime("%Y-%m-%d")}',
-                    xy=(date, price), xytext=(0, 15),
-                    textcoords='offset points', ha='center', fontsize=9,
+                    xy=(date, price), xytext=(0, 20),
+                    textcoords='offset points', ha='center', fontsize=10,
                     color='#ffffff',
-                    bbox=dict(boxstyle='round,pad=0.3', fc='#4CAF50', ec='#ffffff', alpha=0.8))
+                    bbox=dict(boxstyle='round,pad=0.4', fc='#ff007a', ec='#00ffcc', alpha=0.9,
+                              path_effects=[plt.patheffects.withStroke(linewidth=2, foreground='#00ffcc')]))
 
 plt.tight_layout()
 st.pyplot(fig)
