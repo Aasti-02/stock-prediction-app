@@ -8,68 +8,79 @@ from matplotlib.dates import DateFormatter, YearLocator, MonthLocator
 # Set page configuration for a wide, professional layout
 st.set_page_config(page_title="Stock Price Predictor 📈", layout="wide")
 
-# Custom CSS for a pastel green and white theme
+# Custom CSS for a refined pastel green and white theme
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto:wght@300;400;700&display=swap');
     
     .main {
         background: linear-gradient(135deg, #ABFAA9 0%, #ffffff 100%);
-        padding: 30px;
-        border-radius: 15px;
-        box-shadow: 0 0 10px rgba(171, 250, 169, 0.3);
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 4px 20px rgba(171, 250, 169, 0.2);
     }
     h1 {
         font-family: 'Poppins', sans-serif;
         color: #2e7d32;
-        font-size: 2.5em;
+        font-size: 2.8em;
+        font-weight: 600;
         text-align: center;
+        margin-bottom: 30px;
     }
     h2 {
         font-family: 'Poppins', sans-serif;
         color: #388e3c;
-        font-size: 1.7em;
+        font-size: 1.8em;
+        font-weight: 500;
+        margin-top: 30px;
+        margin-bottom: 15px;
     }
     .stSelectbox, .stNumberInput > div > div > input {
         background-color: #ffffff;
         border: 2px solid #ABFAA9;
-        border-radius: 10px;
+        border-radius: 12px;
         color: #2e2e2e;
         font-family: 'Roboto', sans-serif;
-        padding: 8px;
-        transition: border-color 0.3s;
+        font-size: 0.95em;
+        padding: 10px;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
     .stSelectbox:hover, .stNumberInput > div > div > input:hover {
         border-color: #388e3c;
+        box-shadow: 0 2px 10px rgba(56, 142, 60, 0.2);
     }
     .stButton > button {
         background: linear-gradient(45deg, #ABFAA9, #ffffff);
         color: #2e7d32;
         border: none;
-        border-radius: 10px;
+        border-radius: 12px;
         font-family: 'Poppins', sans-serif;
         font-weight: 600;
-        padding: 10px 25px;
-        transition: transform 0.3s, box-shadow 0.3s;
-        box-shadow: 0 0 10px rgba(171, 250, 169, 0.4);
+        font-size: 0.95em;
+        padding: 12px 30px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 2px 10px rgba(171, 250, 169, 0.3);
     }
     .stButton > button:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0 15px rgba(56, 142, 60, 0.6);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(56, 142, 60, 0.4);
     }
     .stSuccess {
         background: linear-gradient(45deg, #81c784, #c8e6c9);
-        border-radius: 10px;
-        padding: 12px;
+        border-radius: 12px;
+        padding: 15px;
         color: #2e2e2e;
         font-family: 'Roboto', sans-serif;
-        box-shadow: 0 0 10px rgba(129, 199, 132, 0.4);
+        font-size: 0.95em;
+        box-shadow: 0 2px 10px rgba(129, 199, 132, 0.3);
         text-align: center;
+        margin-top: 20px;
     }
     .stMarkdown p, .stMarkdown li {
         font-family: 'Roboto', sans-serif;
         color: #ffffff;
         font-size: 0.9em;
+        line-height: 1.5;
     }
     .stMarkdown strong {
         color: #ffffff;
@@ -82,8 +93,8 @@ st.markdown("""
         display: flex;
         flex-direction: column;
         justify-content: space-around;
-        width: 25px;
-        height: 20px;
+        width: 28px;
+        height: 22px;
         background: transparent;
         border: none;
     }
@@ -93,18 +104,18 @@ st.markdown("""
         background: #388e3c;
         border-radius: 2px;
         transition: all 0.3s ease;
-        box-shadow: 0 0 5px rgba(56, 142, 60, 0.5);
+        box-shadow: 0 0 5px rgba(56, 142, 60, 0.4);
     }
     .hamburger:hover span {
         background: #ABFAA9;
-        box-shadow: 0 0 8px rgba(171, 250, 169, 0.7);
+        box-shadow: 0 0 8px rgba(171, 250, 169, 0.6);
     }
     .sidebar-content {
         background: #ffffff;
-        border-radius: 10px;
-        padding: 15px;
-        box-shadow: 0 0 10px rgba(171, 250, 169, 0.3);
-        margin-top: 10px;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(171, 250, 169, 0.2);
+        margin-top: 15px;
     }
     </style>
 """, unsafe_allow_html=True)
