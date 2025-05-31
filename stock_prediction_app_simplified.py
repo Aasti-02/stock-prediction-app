@@ -6,71 +6,77 @@ import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter, YearLocator, MonthLocator
 
 # Set page configuration for a wide, modern layout
-st.set_page_config(page_title="Futuristic Stock Predictor", layout="wide")
+st.set_page_config(page_title="Neon Stock Predictor", layout="wide")
 
-# Custom CSS for a cyberpunk-inspired, vibrant look
+# Custom CSS for a vibrant, cyberpunk look
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap');
     
     .main {
-        background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
+        background: linear-gradient(135deg, #0a0e1a 0%, #1e2a47 100%);
         padding: 30px;
         border-radius: 15px;
-        box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
     }
     h1 {
         font-family: 'Orbitron', sans-serif;
-        color: #00ffcc;
-        text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc;
-        font-size: 2.5em;
+        color: #00f7ff;
+        text-shadow: 0 0 12px #00f7ff, 0 0 24px #00f7ff;
+        font-size: 2.8em;
+        text-align: center;
     }
     h2 {
         font-family: 'Orbitron', sans-serif;
-        color: #ff007a;
-        text-shadow: 0 0 8px #ff007a;
-        font-size: 1.8em;
+        color: #ff00a1;
+        text-shadow: 0 0 10px #ff00a1;
+        font-size: 1.9em;
     }
     .stSelectbox, .stNumberInput > div > div > input {
-        background-color: #1b263b;
-        border: 2px solid #00ffcc;
-        border-radius: 10px;
+        background-color: #1e2a47;
+        border: 2px solid #00f7ff;
+        border-radius: 12px;
         color: #ffffff;
         font-family: 'Roboto', sans-serif;
-        padding: 8px;
+        padding: 10px;
+        transition: border-color 0.3s;
+    }
+    .stSelectbox:hover, .stNumberInput > div > div > input:hover {
+        border-color: #ff00a1;
     }
     .stButton > button {
-        background: linear-gradient(45deg, #ff007a, #00ffcc);
+        background: linear-gradient(45deg, #ff00a1, #00f7ff);
         color: #ffffff;
         border: none;
-        border-radius: 10px;
+        border-radius: 12px;
         font-family: 'Orbitron', sans-serif;
         font-weight: 700;
-        padding: 12px 24px;
-        transition: transform 0.2s, box-shadow 0.2s;
-        box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        padding: 12px 30px;
+        transition: transform 0.3s, box-shadow 0.3s;
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
     }
     .stButton > button:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+        transform: scale(1.1);
+        box-shadow: 0 0 25px rgba(255, 0, 161, 0.8);
     }
     .stSuccess {
         background: linear-gradient(45deg, #2ecc71, #27ae60);
-        border-radius: 10px;
-        padding: 12px;
+        border-radius: 12px;
+        padding: 15px;
         color: #ffffff;
         font-family: 'Roboto', sans-serif;
-        box-shadow: 0 0 15px rgba(46, 204, 113, 0.5);
+        box-shadow: 0 0 15px rgba(46, 204, 113, 0.6);
+        text-align: center;
     }
     .stMarkdown p {
         font-family: 'Roboto', sans-serif;
-        color: #e0e0e0;
-        font-size: 1.1em;
+        color: #d0d8ff;
+        font-size: 1.2em;
     }
     </style>
 """, unsafe_allow_html=True)
 
-st.title("Futuristic Stock Price Predictor")
+st.title("Neon Stock Price Predictor")
 
 @st.cache_data
 def load_data():
@@ -103,30 +109,30 @@ for ticker in tickers:
     model.fit(X, y)
     models[ticker] = model
 
-# Plotting section with a futuristic graph
+# Plotting section with a vibrant graph
 st.header("Stock Price History")
 ticker = st.selectbox("Choose a company to view historical prices:", tickers, key="plot_ticker")
 ticker_df = df[df['Ticker'] == ticker].copy()
 
-# Custom Matplotlib style for a cyberpunk look
+# Custom Matplotlib style for a neon, futuristic look
 plt.rcParams.update({
-    'axes.facecolor': '#0d1b2a',
-    'figure.facecolor': '#1b263b',
-    'axes.edgecolor': '#00ffcc',
-    'axes.labelcolor': '#00ffcc',
-    'xtick.color': '#00ffcc',
-    'ytick.color': '#00ffcc',
-    'text.color': '#00ffcc',
-    'grid.color': '#00ffcc',
+    'axes.facecolor': '#0a0e1a',
+    'figure.facecolor': '#1e2a47',
+    'axes.edgecolor': '#00f7ff',
+    'axes.labelcolor': '#00f7ff',
+    'xtick.color': '#00f7ff',
+    'ytick.color': '#00f7ff',
+    'text.color': '#00f7ff',
+    'grid.color': '#00f7ff',
     'grid.linestyle': ':',
-    'grid.linewidth': 0.7,
+    'grid.linewidth': 0.8,
     'font.family': 'sans-serif',
     'font.sans-serif': ['Roboto', 'Arial', 'sans-serif']
 })
 
 fig, ax = plt.subplots(figsize=(14, 7))
 ax.plot(ticker_df['Date'], ticker_df['Close'], label=f'{ticker} Closing Price', 
-        color='#ff007a', linewidth=3, path_effects=[plt.patheffects.withStroke(linewidth=4, foreground='#00ffcc')])
+        color='#ff00a1', linewidth=4)
 ax.set_title(f'{ticker} Stock Price Over Time', fontsize=18, fontweight='bold', fontfamily='Orbitron')
 ax.set_xlabel('Date', fontsize=14)
 ax.set_ylabel('Closing Price ($)', fontsize=14)
@@ -149,17 +155,16 @@ else:
 ax.tick_params(axis='x', labelsize=12, rotation=45)
 ax.tick_params(axis='y', labelsize=12)
 ax.grid(True, which='both')
-ax.legend(facecolor='#1b263b', edgecolor='#00ffcc', fontsize=12, loc='upper left')
+ax.legend(facecolor='#1e2a47', edgecolor='#00f7ff', fontsize=12, loc='upper left')
 
 # Neon-styled annotations
 for i, (date, price) in enumerate(zip(ticker_df['Date'], ticker_df['Close'])):
     if i % (len(ticker_df) // 8) == 0:
         ax.annotate(f'${price:.2f}\n{date.strftime("%Y-%m-%d")}',
-                    xy=(date, price), xytext=(0, 20),
+                    xy=(date, price), xytext=(0, 25),
                     textcoords='offset points', ha='center', fontsize=10,
                     color='#ffffff',
-                    bbox=dict(boxstyle='round,pad=0.4', fc='#ff007a', ec='#00ffcc', alpha=0.9,
-                              path_effects=[plt.patheffects.withStroke(linewidth=2, foreground='#00ffcc')]))
+                    bbox=dict(boxstyle='round,pad=0.4', fc='#ff00a1', ec='#00f7ff', alpha=0.9))
 
 plt.tight_layout()
 st.pyplot(fig)
